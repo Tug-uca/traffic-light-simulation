@@ -193,56 +193,65 @@ export interface TimestepData {
 }
 
 /**
+ * キュー長の記録
+ */
+export interface QueueLengthRecord {
+  time: number;
+  queueLengths: Record<Direction, number>;
+}
+
+/**
+ * 信号フェーズの記録
+ */
+export interface SignalPhaseRecord {
+  time: number;
+  phases: Record<Direction, SignalPhase>;
+}
+
+/**
+ * 方向別統計
+ */
+export interface DirectionStatistics {
+  vehicleCount: number;
+  averageTravelTime: number;
+  averageWaitTime: number;
+  throughput: number;
+  averageQueueLength: number;
+}
+
+/**
  * 統計データ
  */
 export interface Statistics {
   totalVehicles: number;
-  completedVehicles: number;
-  waitTime: {
-    mean: number;
-    median: number;
-    stdDev: number;
-    min: number;
-    max: number;
-    percentile90: number;
-  };
-  travelTime: {
-    mean: number;
-    median: number;
-    stdDev: number;
-    min: number;
-    max: number;
-  };
-  queueLength: {
-    mean: number;
-    max: number;
-    byDirection: {
-      north: { mean: number; max: number };
-      south: { mean: number; max: number };
-      east: { mean: number; max: number };
-      west: { mean: number; max: number };
-    };
-  };
-  throughput: {
-    total: number;
-    perMinute: number;
-    perCycle: number;
-  };
+  averageTravelTime: number;
+  averageWaitTime: number;
+  throughput: number;
+  averageDelay: number;
+  averageQueueLength: number;
+  byDirection: Record<Direction, DirectionStatistics>;
+}
+
+/**
+ * 衝突イベント
+ */
+export interface CollisionEvent {
+  time: number;
+  vehicle1Id: string;
+  vehicle2Id: string;
+  location: { x: number; y: number };
+  severity: 'near-miss' | 'collision';
 }
 
 /**
  * シミュレーション結果
  */
 export interface SimulationResults {
-  metadata: {
-    seed: number;
-    duration: number;
-    timeStep: number;
-    intersectionType: IntersectionType;
-    completedAt: string;
-  };
-  parameters: SimulationConfig;
+  config: SimulationConfig;
   statistics: Statistics;
-  timeseries: TimestepData[];
-  vehicles: VehicleData[];
+  vehicleData: VehicleData[];
+  queueLengthHistory: QueueLengthRecord[];
+  signalPhaseHistory: SignalPhaseRecord[];
+  collisionEvents: CollisionEvent[];
+  timestamp: string;
 }

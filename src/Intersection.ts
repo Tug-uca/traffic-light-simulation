@@ -103,6 +103,20 @@ export class Intersection {
   }
 
   /**
+   * 交差点の幅を取得
+   */
+  getWidth(): number {
+    return this.width;
+  }
+
+  /**
+   * 進入路の長さを取得
+   */
+  getApproachLength(): number {
+    return this.approachLength;
+  }
+
+  /**
    * 交差点境界を取得
    */
   getBounds() {
