@@ -33,7 +33,7 @@ src/
 - B) implementation_plan.mdの構造を採用する
 - C) その他（具体的に指示してください）
 
-[Answer 1]
+[Answer 1] ✅ **A) フラット構造優先、シンプルさ優先**
 
 
 ### [Question 2] リポジトリの扱いについて
@@ -42,7 +42,7 @@ src/
 - B) データのインポート/エクスポートはJSONの保存/読込のみで、データベースは使わない
 - C) その他（具体的に説明してください）
 
-[Answer 2]
+[Answer 2] ✅ **B) JSONの保存/読込のみで、データベースは使わない**
 
 
 ### [Question 3] 再利用する標準コンポーネントについて
@@ -52,7 +52,7 @@ src/
 - B) 既存のログライブラリ（具体的に指定してください）
 - C) その他（具体的に説明してください）
 
-[Answer 3]
+[Answer 3] ✅ **A) console.log/console.error（最もシンプル、追加ライブラリ不要）**
 
 
 ### [Question 4] 乱数生成ライブラリについて
@@ -61,7 +61,7 @@ implementation_plan.mdでは`seedrandom.js`の使用が提案されています�
 - B) ブラウザ標準のMath.random()を使用する（再現性は犠牲にする）
 - C) その他のライブラリを使用する（具体的に指定してください）
 
-[Answer 4]
+[Answer 4] ✅ **A) seedrandom.jsを使用する**
 
 
 ### [Question 5] グラフライブラリについて
@@ -71,8 +71,77 @@ implementation_plan.mdでは結果表示にChart.js（オプション）が提�
 - C) グラフ機能は実装しない（数値表示のみ）
 - D) その他のライブラリを使用する（具体的に指定してください）
 
-[Answer 5]
+[Answer 5] ✅ **A) Chart.jsを使用する**
 
+
+---
+
+## 確定した技術仕様
+
+### 依存関係（package.json）
+
+```json
+{
+  "dependencies": {
+    "seedrandom": "^3.0.5",
+    "chart.js": "^4.4.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "@types/seedrandom": "^3.0.8",
+    "typescript": "^5.3.0",
+    "vite": "^5.0.0",
+    "vitest": "^1.0.0"
+  }
+}
+```
+
+### 最終的なプロジェクト構造（フラット）
+
+```
+traffic-light-simulation/
+├── public/
+│   ├── index.html
+│   └── styles.css
+├── src/
+│   ├── main.ts
+│   ├── types.ts
+│   ├── config.ts
+│   ├── Vector2D.ts
+│   ├── Random.ts
+│   ├── Vehicle.ts
+│   ├── TrafficLight.ts
+│   ├── Road.ts
+│   ├── Intersection.ts
+│   ├── VehicleGenerator.ts
+│   ├── SignalController.ts
+│   ├── MovementSystem.ts
+│   ├── CollisionAvoidance.ts
+│   ├── DataCollector.ts
+│   ├── Statistics.ts
+│   ├── DataExporter.ts
+│   ├── Simulation.ts
+│   ├── Renderer.ts
+│   ├── IntersectionRenderer.ts
+│   ├── VehicleRenderer.ts
+│   ├── TrafficLightRenderer.ts
+│   ├── InfoDisplay.ts
+│   ├── ControlPanel.ts
+│   ├── ParameterEditor.ts
+│   ├── ResultsPanel.ts
+│   └── ChartManager.ts
+├── design/
+│   ├── README.md
+│   ├── odd_document.md
+│   ├── implementation_plan.md
+│   ├── odd_protocol_plan.md
+│   └── coding_plan.md
+├── package.json
+├── tsconfig.json
+├── vite.config.ts
+├── .gitignore
+└── README.md
+```
 
 ---
 
@@ -105,8 +174,19 @@ implementation_plan.mdでは結果表示にChart.js（オプション）が提�
 
 ### フェーズ2: ユーティリティとタイプ定義（2日目）
 
+**📁 ディレクトリ構造（フラット）:**
+```
+src/
+├── main.ts
+├── types.ts
+├── Vector2D.ts
+├── Random.ts
+├── config.ts
+└── (以降のフェーズで追加するファイル)
+```
+
 #### ステップ2.1: タイプ定義
-- [ ] types/index.ts（またはtypes.ts）の作成
+- [ ] **src/types.ts** の作成
   - [ ] Direction型（"north" | "south" | "east" | "west"）
   - [ ] TurnIntent型（"straight" | "left" | "right"）
   - [ ] SignalPhase型（"green" | "yellow" | "red"）
@@ -114,7 +194,7 @@ implementation_plan.mdでは結果表示にChart.js（オプション）が提�
   - [ ] VehicleConfig, TrafficLightConfig, SimulationConfig等のインターフェース
 
 #### ステップ2.2: Vector2Dユーティリティ
-- [ ] Vector2Dクラスの実装（position管理用）
+- [ ] **src/Vector2D.ts** の作成（position管理用）
   - [ ] constructor(x: number, y: number)
   - [ ] add(other: Vector2D): Vector2D
   - [ ] subtract(other: Vector2D): Vector2D
@@ -124,13 +204,13 @@ implementation_plan.mdでは結果表示にChart.js（オプション）が提�
   - [ ] distance(other: Vector2D): number
 
 #### ステップ2.3: 乱数ユーティリティ
-- [ ] Random/Randomクラスの実装（シード固定乱数）
+- [ ] **src/Random.ts** の作成（シード固定乱数、seedrandom.js使用）
   - [ ] constructor(seed: number)
   - [ ] random(): number（0-1の一様乱数）
-  - [ ] 注: [Answer 4]の回答に基づいて実装方法を決定
+  - [ ] seedrandom.jsのインストール: `npm install seedrandom @types/seedrandom`
 
 #### ステップ2.4: 設定管理
-- [ ] Configクラス/オブジェクトの実装
+- [ ] **src/config.ts** の作成
   - [ ] デフォルトパラメータの定義
   - [ ] 設定の読み込みと検証
 
@@ -143,8 +223,17 @@ implementation_plan.mdでは結果表示にChart.js（オプション）が提�
 
 ### フェーズ3: コアエンティティの実装（3-4日目）
 
+**📁 追加ファイル:**
+```
+src/
+├── Vehicle.ts
+├── TrafficLight.ts
+├── Road.ts
+└── Intersection.ts
+```
+
 #### ステップ3.1: Vehicleクラス
-- [ ] Vehicleクラスの実装（odd_document.md 3.3.1参照）
+- [ ] **src/Vehicle.ts** の作成（odd_document.md 3.3.1参照）
   - [ ] プロパティ定義（id, position, velocity, direction等）
   - [ ] constructor(config: VehicleConfig)
   - [ ] update(dt: number, frontVehicle: Vehicle | null, trafficLight: TrafficLight)メソッド
@@ -153,7 +242,7 @@ implementation_plan.mdでは結果表示にChart.js（オプション）が提�
   - [ ] getDirectionVector()メソッド
 
 #### ステップ3.2: TrafficLightクラス
-- [ ] TrafficLightクラスの実装（odd_document.md 1.2.1参照）
+- [ ] **src/TrafficLight.ts** の作成（odd_document.md 1.2.1参照）
   - [ ] プロパティ定義（id, direction, phase, timeInPhase等）
   - [ ] constructor(config: TrafficLightConfig)
   - [ ] setPhase(newPhase: SignalPhase)メソッド
@@ -161,13 +250,13 @@ implementation_plan.mdでは結果表示にChart.js（オプション）が提�
   - [ ] canPass(): booleanメソッド
 
 #### ステップ3.3: Roadクラス
-- [ ] Roadクラスの実装
+- [ ] **src/Road.ts** の作成
   - [ ] プロパティ定義（direction, numLanes, length, laneWidth）
   - [ ] constructor(config: RoadConfig)
   - [ ] 車線の位置計算メソッド
 
 #### ステップ3.4: Intersectionクラス
-- [ ] Intersectionクラスの実装
+- [ ] **src/Intersection.ts** の作成
   - [ ] プロパティ定義（type, dimensions, roads）
   - [ ] constructor(config: IntersectionConfig)
   - [ ] addRoad(direction: Direction, road: Road)メソッド
@@ -183,8 +272,17 @@ implementation_plan.mdでは結果表示にChart.js（オプション）が提�
 
 ### フェーズ4: シミュレーションシステム（5-6日目）
 
+**📁 追加ファイル:**
+```
+src/
+├── VehicleGenerator.ts
+├── SignalController.ts
+├── MovementSystem.ts
+└── CollisionAvoidance.ts
+```
+
 #### ステップ4.1: VehicleGeneratorクラス
-- [ ] VehicleGeneratorクラスの実装（odd_document.md 3.3.3参照）
+- [ ] **src/VehicleGenerator.ts** の作成（odd_document.md 3.3.3参照）
   - [ ] constructor(config, rng)
   - [ ] tryGenerate(direction: Direction, dt: number): Vehicle | null
   - [ ] createVehicle(direction: Direction): Vehicle
@@ -192,7 +290,7 @@ implementation_plan.mdでは結果表示にChart.js（オプション）が提�
   - [ ] getEntryPosition(direction: Direction): Vector2D
 
 #### ステップ4.2: SignalControllerクラス
-- [ ] SignalControllerクラスの実装（odd_document.md 3.3.2参照）
+- [ ] **src/SignalController.ts** の作成（odd_document.md 3.3.2参照）
   - [ ] constructor(trafficLights, config)
   - [ ] buildSchedule(): PhaseSchedule[]
   - [ ] update(dt: number)メソッド
@@ -200,13 +298,13 @@ implementation_plan.mdでは結果表示にChart.js（オプション）が提�
   - [ ] applyPhase(phase: PhaseSchedule)メソッド
 
 #### ステップ4.3: MovementSystemモジュール
-- [ ] 車両移動ロジックの実装
+- [ ] **src/MovementSystem.ts** の作成
   - [ ] updateVehicles(vehicles: Vehicle[], dt: number, trafficLights, intersection)
   - [ ] findFrontVehicle(vehicle: Vehicle, vehicles: Vehicle[]): Vehicle | null
   - [ ] calculateGap(vehicle: Vehicle, frontVehicle: Vehicle): number
 
 #### ステップ4.4: CollisionAvoidanceシステム
-- [ ] 衝突回避ロジックの実装
+- [ ] **src/CollisionAvoidance.ts** の作成
   - [ ] checkCollisions(vehicles: Vehicle[])
   - [ ] resolveOverlap(v1: Vehicle, v2: Vehicle)
 
@@ -220,28 +318,34 @@ implementation_plan.mdでは結果表示にChart.js（オプション）が提�
 
 ### フェーズ5: データ収集と統計（7日目）
 
+**📁 追加ファイル:**
+```
+src/
+├── DataCollector.ts
+├── Statistics.ts
+└── DataExporter.ts
+```
+
 #### ステップ5.1: DataCollectorクラス
-- [ ] DataCollectorクラスの実装（odd_document.md 3.3.5参照）
+- [ ] **src/DataCollector.ts** の作成（odd_document.md 3.3.5参照）
   - [ ] constructor()
   - [ ] collect(time: number, vehicles: Vehicle[], trafficLights)メソッド
   - [ ] recordVehicleExit(vehicle: Vehicle)メソッド
   - [ ] reset()メソッド
   - [ ] getStatistics()メソッド
 
-#### ステップ5.2: Statisticsクラス/モジュール
-- [ ] 統計計算ロジックの実装
+#### ステップ5.2: Statisticsモジュール
+- [ ] **src/Statistics.ts** の作成
   - [ ] calculateMean(data: number[]): number
   - [ ] calculateMedian(data: number[]): number
   - [ ] calculateStdDev(data: number[]): number
   - [ ] calculatePercentile(data: number[], percentile: number): number
 
 #### ステップ5.3: データエクスポート機能
-- [ ] JSONエクスポート機能
+- [ ] **src/DataExporter.ts** の作成（JSONエクスポート）
   - [ ] exportToJSON(data: any): string
   - [ ] downloadJSON(data: any, filename: string)
-- [ ] CSVエクスポート機能（オプション）
-  - [ ] exportToCSV(data: any): string
-  - [ ] downloadCSV(data: any, filename: string)
+  - [ ] 注: LocalStorage/IndexedDBは使用しない（メモリのみ）
 
 **成果物チェック:**
 - [ ] 時系列データが正しく記録される
@@ -252,8 +356,14 @@ implementation_plan.mdでは結果表示にChart.js（オプション）が提�
 
 ### フェーズ6: Simulationクラス（8日目）
 
+**📁 追加ファイル:**
+```
+src/
+└── Simulation.ts
+```
+
 #### ステップ6.1: Simulationクラスの実装
-- [ ] Simulationクラスの実装（odd_document.md 1.3, implementation_plan.md参照）
+- [ ] **src/Simulation.ts** の作成（odd_document.md 1.3, implementation_plan.md参照）
   - [ ] constructor(config: SimulationConfig)
   - [ ] initialize()メソッド
   - [ ] start()メソッド
@@ -285,33 +395,43 @@ implementation_plan.mdでは結果表示にChart.js（オプション）が提�
 
 ### フェーズ7: 可視化実装（9-11日目）
 
+**📁 追加ファイル:**
+```
+src/
+├── Renderer.ts
+├── IntersectionRenderer.ts
+├── VehicleRenderer.ts
+├── TrafficLightRenderer.ts
+└── InfoDisplay.ts
+```
+
 #### ステップ7.1: Rendererクラス基本実装
-- [ ] Rendererクラスの実装
+- [ ] **src/Renderer.ts** の作成
   - [ ] constructor(canvas: HTMLCanvasElement, config)
   - [ ] render(intersection, vehicles, trafficLights)メソッド
   - [ ] clear()メソッド
   - [ ] 座標変換ロジック（ワールド座標→スクリーン座標）
 
 #### ステップ7.2: IntersectionRendererモジュール
-- [ ] 交差点の描画
+- [ ] **src/IntersectionRenderer.ts** の作成
   - [ ] drawIntersection(ctx: CanvasRenderingContext2D, intersection)
   - [ ] 道路の描画
   - [ ] 車線の描画
   - [ ] 停止線の描画
 
 #### ステップ7.3: VehicleRendererモジュール
-- [ ] 車両の描画
+- [ ] **src/VehicleRenderer.ts** の作成
   - [ ] drawVehicle(ctx: CanvasRenderingContext2D, vehicle)
   - [ ] 車両の向きに応じた描画
   - [ ] 車両のステータスに応じた色分け
 
 #### ステップ7.4: TrafficLightRendererモジュール
-- [ ] 信号機の描画
+- [ ] **src/TrafficLightRenderer.ts** の作成
   - [ ] drawTrafficLight(ctx: CanvasRenderingContext2D, trafficLight)
   - [ ] フェーズに応じた色（赤・黄・緑）の表示
 
-#### ステップ7.5: UIRenderer/情報表示
-- [ ] リアルタイム情報の描画
+#### ステップ7.5: 情報表示
+- [ ] **src/InfoDisplay.ts** の作成（リアルタイム情報）
   - [ ] 現在時刻の表示
   - [ ] 車両数の表示
   - [ ] キュー長の表示
@@ -326,7 +446,16 @@ implementation_plan.mdでは結果表示にChart.js（オプション）が提�
 
 ### フェーズ8: UIコントロール（12-13日目）
 
+**📁 追加ファイル:**
+```
+src/
+├── ControlPanel.ts
+├── ParameterEditor.ts
+└── ResultsPanel.ts
+```
+
 #### ステップ8.1: ControlPanelの実装
+- [ ] **src/ControlPanel.ts** の作成
 - [ ] HTML要素の作成（index.htmlに追加）
   - [ ] 開始ボタン
   - [ ] 停止ボタン
@@ -334,6 +463,7 @@ implementation_plan.mdでは結果表示にChart.js（オプション）が提�
   - [ ] 速度調整スライダー（オプション）
 
 #### ステップ8.2: ParameterEditorの実装
+- [ ] **src/ParameterEditor.ts** の作成
 - [ ] パラメータ入力UIの作成
   - [ ] サイクル長入力（南北・東西）
   - [ ] 車両生成率入力（4方向）
@@ -342,6 +472,7 @@ implementation_plan.mdでは結果表示にChart.js（オプション）が提�
   - [ ] 乱数シード入力
 
 #### ステップ8.3: ResultsPanelの実装
+- [ ] **src/ResultsPanel.ts** の作成
 - [ ] 結果表示UIの作成
   - [ ] リアルタイム統計表示エリア
   - [ ] 最終結果表示エリア
@@ -359,21 +490,33 @@ implementation_plan.mdでは結果表示にChart.js（オプション）が提�
 
 ---
 
-### フェーズ9: グラフ表示（14日目）※オプション
+### フェーズ9: グラフ表示（14日目）
 
-[Answer 5]の回答に基づいて実装内容を決定
+**📁 追加ファイル:**
+```
+src/
+└── ChartManager.ts
+```
 
-#### ステップ9.1: グラフライブラリのセットアップ（Chart.js使用の場合）
-- [ ] Chart.jsのインストールと設定
-- [ ] グラフ用のcanvas要素の追加
+#### ステップ9.1: グラフライブラリのセットアップ
+- [ ] Chart.jsのインストール: `npm install chart.js`
+- [ ] グラフ用のcanvas要素をindex.htmlに追加
 
-#### ステップ9.2: グラフの実装
-- [ ] キュー長の時系列グラフ
+#### ステップ9.2: ChartManagerの実装
+- [ ] **src/ChartManager.ts** の作成
+  - [ ] constructor(canvasElements)
+  - [ ] initializeCharts()メソッド
+  - [ ] updateQueueLengthChart(data)メソッド
+  - [ ] updateThroughputChart(data)メソッド
+  - [ ] showFinalResults(statistics)メソッド
+
+#### ステップ9.3: グラフの実装
+- [ ] キュー長の時系列グラフ（4方向）
 - [ ] 累積通過台数のグラフ
 - [ ] 待ち時間分布のヒストグラム（オプション）
 
-#### ステップ9.3: グラフの更新ロジック
-- [ ] リアルタイムデータ更新
+#### ステップ9.4: グラフの更新ロジック
+- [ ] リアルタイムデータ更新（定期的な間引き更新）
 - [ ] シミュレーション終了時の最終グラフ表示
 
 **成果物チェック:**
@@ -544,14 +687,34 @@ implementation_plan.mdでは結果表示にChart.js（オプション）が提�
 
 ---
 
-## レビュー待ち事項
+## 実装準備完了
 
-以下の質問（Question 1-5）にご回答いただいた後、実装を開始します。
+### ✅ 全ての事前確認完了
 
-回答をいただき次第、計画を最終調整して実装フェーズに進みます。
+以下の方針が確定しました:
+
+1. **ディレクトリ構造**: フラット構造（src/直下に全ファイル配置）
+2. **データ永続化**: JSONエクスポート/インポートのみ（DB不使用）
+3. **ログ**: console.log/console.error（標準APIのみ）
+4. **乱数生成**: seedrandom.js（再現性確保）
+5. **グラフ**: Chart.js使用
+
+### 📦 依存ライブラリ（最小限）
+- **seedrandom** (乱数生成、再現性のため)
+- **chart.js** (グラフ表示)
+
+### 📂 最終ファイル数
+- **src/**: 24ファイル（フラット構造）
+- **public/**: 2ファイル（HTML, CSS）
+- **設定ファイル**: 4ファイル（package.json, tsconfig.json, vite.config.ts, .gitignore）
+
+### 🚀 次のアクション
+
+この計画を承認いただければ、すぐに **フェーズ1: プロジェクトセットアップ** から実装を開始できます。
 
 ---
 
 **作成者**: Claude Code
 **作成日**: 2025-12-03
-**ステータス**: ✅ 計画作成完了 - レビュー待ち
+**最終更新**: 2025-12-03
+**ステータス**: ✅ **実装準備完了 - 承認待ち**
