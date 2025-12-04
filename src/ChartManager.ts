@@ -298,8 +298,7 @@ export class ChartManager {
    * @param results - シミュレーション結果
    */
   createAllCharts(results: SimulationResults): void {
-    this.createQueueLengthChart('queue-length-chart', results);
-    this.createTravelTimeChart('travel-time-chart', results);
+    this.createQueueLengthChart('queue-chart', results);
     this.createThroughputChart('throughput-chart', results);
   }
 
