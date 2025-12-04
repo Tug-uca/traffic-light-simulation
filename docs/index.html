@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>交差点信号機シミュレーション</title>
+  <link rel="stylesheet" href="/traffic-light-simulation/style.css">
+  <script type="module" crossorigin src="/traffic-light-simulation/assets/index-BgFYiKBY.js"></script>
+</head>
+<body>
+  <div id="app">
+    <header>
+      <h1>交差点信号機シミュレーション</h1>
+      <p>Agent-based Traffic Light Simulation</p>
+    </header>
+
+    <main>
+      <!-- Control Panel -->
+      <section id="control-panel">
+        <h2>コントロール</h2>
+        <div class="controls">
+          <button id="start-btn">開始</button>
+          <button id="pause-btn">停止</button>
+          <button id="reset-btn">リセット</button>
+        </div>
+      </section>
+
+      <!-- Canvas Visualization -->
+      <section id="visualization">
+        <h2>シミュレーション</h2>
+        <canvas id="simulation-canvas" width="800" height="800"></canvas>
+      </section>
+
+      <!-- Parameter Editor -->
+      <section id="parameter-editor">
+        <h2>パラメータ設定</h2>
+        <div class="parameter-group">
+          <label>
+            交差点タイプ:
+            <select id="intersection-type">
+              <option value="fourWay">十字路</option>
+              <option value="threeWay">T字路</option>
+            </select>
+          </label>
+        </div>
+        <div class="parameter-group">
+          <label>
+            南北青信号時間 (秒):
+            <input type="number" id="green-ns" value="30" min="10" max="90">
+          </label>
+        </div>
+        <div class="parameter-group">
+          <label>
+            東西青信号時間 (秒):
+            <input type="number" id="green-ew" value="30" min="10" max="90">
+          </label>
+        </div>
+        <div class="parameter-group">
+          <label>
+            車両生成率 (台/分):
+            <input type="number" id="spawn-rate" value="15" min="0" max="60">
+          </label>
+        </div>
+        <div class="parameter-group">
+          <label>
+            乱数シード:
+            <input type="number" id="random-seed" value="42">
+          </label>
+        </div>
+      </section>
+
+      <!-- Results Panel -->
+      <section id="results-panel">
+        <h2>統計情報</h2>
+        <div id="real-time-stats">
+          <p>シミュレーション時刻: <span id="sim-time">0</span>秒</p>
+          <p>車両数: <span id="vehicle-count">0</span>台</p>
+          <p>平均待ち時間: <span id="avg-wait-time">-</span>秒</p>
+        </div>
+        <button id="export-btn">データをエクスポート</button>
+      </section>
+
+      <!-- Charts -->
+      <section id="charts">
+        <h2>グラフ</h2>
+        <div class="chart-container">
+          <canvas id="queue-chart"></canvas>
+        </div>
+        <div class="chart-container">
+          <canvas id="throughput-chart"></canvas>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <p>Traffic Light Simulation &copy; 2025</p>
+    </footer>
+  </div>
+
+</body>
+</html>
