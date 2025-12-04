@@ -9,7 +9,7 @@ lerna-debug.log*
 
 # Dependencies
 node_modules
-dist
+# dist - commenting out to deploy to GitHub Pages
 dist-ssr
 *.local
 
