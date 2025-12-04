@@ -22,11 +22,13 @@ export class ChartManager {
    * @param results - シミュレーション結果
    */
   createQueueLengthChart(canvasId: string, results: SimulationResults): void {
+    console.log(`📊 Creating queue length chart with canvasId: "${canvasId}"`);
     const canvas = document.getElementById(canvasId) as HTMLCanvasElement;
     if (!canvas) {
-      console.error(`Canvas with id "${canvasId}" not found`);
+      console.error(`❌ Canvas with id "${canvasId}" not found`);
       return;
     }
+    console.log(`✅ Canvas element found:`, canvas);
 
     // 既存のチャートを破棄
     if (this.queueLengthChart) {
@@ -34,7 +36,9 @@ export class ChartManager {
     }
 
     // データの準備
+    console.log(`📈 Queue length history records: ${results.queueLengthHistory.length}`);
     const { labels, datasets } = this.prepareQueueLengthData(results.queueLengthHistory);
+    console.log(`📈 Prepared ${labels.length} labels and ${datasets.length} datasets`);
 
     // チャートの作成
     this.queueLengthChart = new Chart(canvas, {
@@ -73,6 +77,7 @@ export class ChartManager {
         },
       },
     });
+    console.log(`✅ Queue length chart created successfully`);
   }
 
   /**
@@ -147,11 +152,13 @@ export class ChartManager {
    * @param results - シミュレーション結果
    */
   createThroughputChart(canvasId: string, results: SimulationResults): void {
+    console.log(`📊 Creating throughput chart with canvasId: "${canvasId}"`);
     const canvas = document.getElementById(canvasId) as HTMLCanvasElement;
     if (!canvas) {
-      console.error(`Canvas with id "${canvasId}" not found`);
+      console.error(`❌ Canvas with id "${canvasId}" not found`);
       return;
     }
+    console.log(`✅ Canvas element found:`, canvas);
 
     // 既存のチャートを破棄
     if (this.throughputChart) {
@@ -159,7 +166,9 @@ export class ChartManager {
     }
 
     // データの準備
+    console.log(`📈 Statistics:`, results.statistics.byDirection);
     const { labels, data } = this.prepareThroughputData(results);
+    console.log(`📈 Prepared ${labels.length} labels and ${data.length} data points:`, data);
 
     // チャートの作成
     this.throughputChart = new Chart(canvas, {
@@ -215,6 +224,7 @@ export class ChartManager {
         },
       },
     });
+    console.log(`✅ Throughput chart created successfully`);
   }
 
   /**
@@ -298,8 +308,15 @@ export class ChartManager {
    * @param results - シミュレーション結果
    */
   createAllCharts(results: SimulationResults): void {
+    console.log(`📊 Creating all charts...`);
+    console.log(`📊 Results summary:`, {
+      totalVehicles: results.statistics.totalVehicles,
+      queueLengthRecords: results.queueLengthHistory.length,
+      vehicleDataRecords: results.vehicleData.length
+    });
     this.createQueueLengthChart('queue-chart', results);
     this.createThroughputChart('throughput-chart', results);
+    console.log(`✅ All charts created`);
   }
 
   /**
