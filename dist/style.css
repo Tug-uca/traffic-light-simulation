@@ -193,10 +193,16 @@ select:focus {
   padding: 15px;
   background-color: #ecf0f1;
   border-radius: 4px;
+  height: 400px;
+  position: relative;
 }
 
 .chart-container:last-child {
   margin-bottom: 0;
+}
+
+.chart-container canvas {
+  max-height: 100%;
 }
 
 /* Footer */
